@@ -105,33 +105,79 @@ def get_user_input() -> float:
             print(f"Wartość '{val}', musi byc typu float")
 
 
-def app_menu():
-    os.system("cls")
+def get_menu_option() -> int:
+    """
+         returns user selection from the menu
+
+         Get user input from console. Check if match menu available options.
+
+             :returns: user selection
+             :rtype: int
+
+             :Example:
+
+                 >>> a = get_menu_option()
+                 Podaj wartość: 1
+                 >>> print(a)
+                 1
+                 >>> a = get_menu_option()
+                 Podaj wartość: q
+                 exit
+         """
+    while 1:
+        val = input("Twój wybór: ").strip().lower()
+        if val == 'q':
+            quit(0)
+            return 0
+        elif val == '1' or val == '2':
+            return int(val)
+        else:
+            print(f"Wartość '{val}' nie jest opcją menu. Spróbuj raz jeszcze...")
+
+
+def print_header():
+    """
+         clear console and print header information
+
+             :Example:
+
+                 >>> print_header()
+                 Wprowadzenie do Informatyki (Moduł 1)
+                     by Jakub Sydor, Przemysław Nowak
+         """
+    #  Clear console
+    if os.name == "nt":  # Check if windows
+        os.system("cls")
+    else:  # Else for unix based system
+        os.system("clear")
     print("Wprowadzenie do Informatyki (Moduł 1)")
     print("     by Jakub Sydor, Przemysław Nowak")
     print("")
-    print("  Wybór opcji:  ")
-    print("    1: celcjusz -> fahrenheit  ")
-    print("    2: fahrenheit -> celcjusz  ")
-    print("    q: wyjście  ")
-    choose = input("Twój wybór: ")
 
-    a = get_user_input()
 
-    if choose == '1':
-        print(f"{format_temp_unit(a, 'c')} jest to {format_temp_unit(celsius_to_fahrenheit(a), 'f')}")
-    elif choose == '2':
-        print(f"{format_temp_unit(a, 'f')} jest to {format_temp_unit(fahrenheit_to_celsius(a), 'c')}")
-    elif choose == 'q':
-        return 0
-    else:
-        print('Wartość menu nieznana')
+def app_menu():
+    print_header()
+    print("=== Menu kalkulatora ===")
+    print("    1: Celsjusz -> Fahrenheit  ")
+    print("    2: Fahrenheit -> Celsjusz  ")
+    print("    q: Wyjdź  ")
+    choose = get_menu_option()
+
+    base_value = get_user_input()
+
+    print_header()
+    print('\033[1m', end='')  # start Bold output
+    if choose == 1:
+        print(f"{format_temp_unit(base_value, 'c')} jest to {format_temp_unit(celsius_to_fahrenheit(base_value), 'f')}")
+    elif choose == 2:
+        print(f"{format_temp_unit(base_value, 'f')} jest to {format_temp_unit(fahrenheit_to_celsius(base_value), 'c')}")
+    print('\033[0m', end='')  # end Bold output
 
     print()
-    print("Kliknij enter, aby móc dalej przeliczać...")
+    print("Kliknij enter, aby zacząć od nowa")
     input()
     return app_menu()
 
 
 if __name__ == '__main__':
-    app_menu()
+    app_menu()  # Run app menu
